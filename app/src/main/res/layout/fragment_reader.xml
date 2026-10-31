@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/readerRootContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/kindle_sepia_bg">
+
+    <!-- Category Tabs (JNI Guide / Android Principles) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="#222C3A"
+            app:tabIndicatorColor="@color/accent"
+            app:tabIndicatorHeight="3dp"
+            app:tabSelectedTextColor="#38BDF8"
+            app:tabTextColor="#94A3B8"
+            app:tabMode="fixed"
+            app:tabGravity="fill" />
+
+        <!-- Search Bar -->
+        <LinearLayout
+            android:id="@+id/searchBarContainer"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="#1A202C"
+            android:paddingHorizontal="12dp">
+
+            <EditText
+                android:id="@+id/etSearch"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Search documentation..."
+                android:textSize="14sp"
+                android:textColorHint="#94A3B8"
+                android:textColor="#E2E8F0"
+                android:background="@android:color/transparent"
+                android:paddingVertical="8dp"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:singleLine="true"
+                android:maxLines="1" />
+
+            <ImageButton
+                android:id="@+id/btnSearch"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_search"
+                android:contentDescription="Search"
+                app:tint="#38BDF8" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Reading ViewPager2 for Smooth Swiping -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- Reading Progress Indicator -->
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/readingProgress"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:progress="20"
+        app:indicatorColor="@color/accent"
+        app:trackColor="#33000000" />
+
+    <!-- Kindle Footer Controls -->
+    <LinearLayout
+        android:id="@+id/bottomControlBar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/primary_dark"
+        android:paddingHorizontal="12dp">
+
+        <ImageButton
+            android:id="@+id/btnPrevPage"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_chevron_left"
+            android:contentDescription="Previous Page"
+            app:tint="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/tvPageIndicator"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Page 1 of 5 • Sepia Mode"
+            android:textColor="#E2E8F0"
+            android:textSize="12sp"
+            android:fontFamily="sans-serif" />
+
+        <ImageButton
+            android:id="@+id/btnQuickQuiz"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_quiz"
+            android:contentDescription="Quick Quiz"
+            app:tint="#FFFFFF" />
+
+        <ImageButton
+            android:id="@+id/btnNotes"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_note"
+            android:contentDescription="Notes"
+            app:tint="#FFFFFF" />
+
+        <ImageButton
+            android:id="@+id/btnTableOfContents"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_list"
+            android:contentDescription="Table of Contents"
+            app:tint="#FFFFFF" />
+
+        <ImageButton
+            android:id="@+id/btnBookmark"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_bookmark_outline"
+            android:contentDescription="Bookmark Page"
+            app:tint="#FFFFFF" />
+
+        <ImageButton
+            android:id="@+id/btnNextPage"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_chevron_right"
+            android:contentDescription="Next Page"
+            app:tint="#FFFFFF" />
+    </LinearLayout>
+
+</LinearLayout>

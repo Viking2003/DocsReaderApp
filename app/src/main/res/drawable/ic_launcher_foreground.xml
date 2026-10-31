@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Document Body -->
+    <path
+        android:fillColor="#F8FAFC"
+        android:pathData="M32,20 C29.79,20 28,21.79 28,24 L28,84 C28,86.21 29.79,88 32,88 L76,88 C78.21,88 80,86.21 80,84 L80,38 L62,20 L32,20 Z" />
+
+    <!-- Folded Corner -->
+    <path
+        android:fillColor="#CBD5E1"
+        android:pathData="M62,20 L80,38 L62,38 Z" />
+
+    <!-- Document Header / Accent -->
+    <path
+        android:fillColor="#38BDF8"
+        android:pathData="M36,44 H72 V48 H36 Z" />
+
+    <!-- Text Lines -->
+    <path
+        android:fillColor="#64748B"
+        android:pathData="M36,52 H68 V55 H36 Z" />
+    <path
+        android:fillColor="#64748B"
+        android:pathData="M36,59 H72 V62 H36 Z" />
+    <path
+        android:fillColor="#64748B"
+        android:pathData="M36,66 H60 V69 H36 Z" />
+    <path
+        android:fillColor="#64748B"
+        android:pathData="M36,73 H66 V76 H36 Z" />
+
+    <!-- Bookmark Badge -->
+    <path
+        android:fillColor="#F43F5E"
+        android:pathData="M40,20 L50,20 L50,36 L45,32 L40,36 Z" />
+</vector>

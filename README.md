@@ -1,0 +1,330 @@
+# Docs Reader Application
+
+A modern, feature-rich Android documentation reader built with Kotlin and Jetpack components. This application provides an immersive reading experience with interactive quizzes, theme customization, and comprehensive learning content about Java Native Interface (JNI) and Android development best practices.
+
+![Android](https://img.shields.io/badge/Android-34%2B-green)
+![Kotlin](https://img.shields.io/badge/Kotlin-1.9-blue)
+![Jetpack](https://img.shields.io/badge/Jetpack-Modern-purple)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+
+## 📥 Download APK
+
+**Latest Release**: [app-release.apk](apks/app-release.apk) (v1.0)
+
+### Quick Installation
+1. Download the APK from the [apks](apks/) folder
+2. Enable "Install from Unknown Sources" in your device settings
+3. Tap the APK file to install
+4. Launch the app and start learning!
+
+### Alternative Download Methods
+- **GitHub Releases**: Check the [Releases](../../releases) page for all versions
+- **Direct Download**: [Download APK](apks/app-release.apk)
+
+### System Requirements
+- Android 14 (API 34) or higher
+- 50 MB of free storage space
+
+> **Note**: For detailed deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md)
+
+## ✨ Features
+
+### 📖 Documentation Reader
+- **Dual Content Tracks**: Explore comprehensive documentation on:
+  - JNI (Java Native Interface) - 5 chapters covering native code integration
+  - Android Development Rules - 5 essential architecture and best practice rules
+- **Smooth Navigation**: Swipe between pages with ViewPager2
+- **Table of Contents**: Quick-jump to any chapter or section
+- **Search Functionality**: Full-text search with real-time highlighting
+- **Reading Progress**: Automatically track and resume where you left off
+
+### 🎨 Reading Experience
+- **Three Reading Themes**:
+  - 📜 **Sepia Mode** - Warm, comfortable for daytime reading (default 9 AM - 7 PM)
+  - ☀️ **Light Mode** - Clean, bright interface (7 AM - 9 AM)
+  - 🌙 **Night Mode** - Dark theme for evening use (7 PM - 7 AM)
+- **Auto Theme Switching**: Automatically adjusts theme based on time of day
+- **Adjustable Font Size**: Scale text from 12sp to 24sp for optimal readability
+- **Kindle-inspired Design**: Professional reading aesthetics
+
+### 🧠 Interactive Learning
+- **Comprehensive Quiz System**: 20+ questions across multiple difficulty levels
+- **Chapter-Specific Quizzes**: Filter questions by current reading topic
+- **Instant Feedback**: Detailed explanations for each answer
+- **Progress Tracking**: Monitor quiz completion and scores
+
+### 📊 Statistics & Analytics
+- **Reading Time Tracker**: Monitor total time spent reading
+- **Quiz Performance**: Track quiz completion rate and average scores
+- **Bookmark Management**: Save and revisit important pages
+- **Personal Notes**: Take and review notes on any page
+
+### 💾 Data Persistence
+- **Jetpack DataStore**: Modern, type-safe data storage
+- **Automatic State Saving**: Preserves reading progress, bookmarks, and notes
+- **Process Death Recovery**: Survives system reclamation and background termination
+
+## 🏗️ Architecture
+
+This application follows modern Android development principles:
+
+```
+┌─────────────────────────────────────────┐
+│           MainActivity                  │
+│  (Tab Navigation & Theme Management)   │
+└──────────────┬──────────────────────────┘
+               │
+       ┌───────┴───────┬────────────┬────────────┐
+       │               │            │            │
+┌──────▼──────┐ ┌─────▼─────┐ ┌────▼────┐ ┌────▼────┐
+│   Reader    │ │   Quiz    │ │  Stats  │ │  Data   │
+│  Fragment   │ │ Fragment  │ │Fragment │ │ Layer   │
+└──────┬──────┘ └─────┬─────┘ └────┬────┘ └────┬────┘
+       │              │            │            │
+┌──────▼──────┐ ┌─────▼─────┐       │      ┌─────▼─────┐
+│  ViewPager2 │ │  Quiz     │       │      │ Preferences│
+│  + Adapter  │ │ Repository│       │      │  Manager  │
+└──────┬──────┘ └───────────┘       │      └───────────┘
+       │                            │
+┌──────▼──────┐                     │
+│  Doc        │                     │
+│ Repository  │                     │
+└─────────────┘                     │
+                                    │
+                         ┌──────────▼──────────┐
+                         │  Jetpack DataStore  │
+                         │  (Preferences)      │
+                         └─────────────────────┘
+```
+
+### Key Architectural Patterns
+- **Fragment-based Navigation**: TabLayout with fragment switching
+- **Repository Pattern**: Centralized data management for documents and quizzes
+- **StateFlow/LiveData**: Reactive state management
+- **Coroutines**: Asynchronous operations for I/O and background tasks
+- **Single Source of Truth**: DataStore as the persistent data layer
+
+## 🛠️ Tech Stack
+
+- **Language**: Kotlin
+- **Minimum SDK**: API 34 (Android 14)
+- **Target SDK**: API 37 (Android 15)
+- **Build System**: Gradle with Kotlin DSL
+
+### Dependencies
+- **Jetpack Core**:
+  - `androidx.core:core-ktx` - Core Kotlin extensions
+  - `androidx.appcompat:appcompat` - AppCompat library
+  - `com.google.android.material:material` - Material Design components
+  - `androidx.lifecycle:lifecycle-runtime-ktx` - Lifecycle-aware components
+
+- **Data Persistence**:
+  - `androidx.datastore:datastore-preferences` - Modern key-value storage
+
+- **UI Components**:
+  - `androidx.games:games-activity` - Enhanced activity support
+  - ViewPager2 - Smooth page swiping
+  - TabLayout - Navigation tabs
+
+- **Testing**:
+  - JUnit 4 - Unit testing
+  - AndroidX Test Runner - Instrumented testing
+  - Espresso - UI testing
+
+## 📱 Screenshots
+
+### Reader View
+- Clean, distraction-free reading interface
+- Page navigation with progress indicator
+- Quick access to bookmarks, table of contents, and notes
+
+### Quiz Mode
+- Multiple-choice questions with instant feedback
+- Difficulty-based categorization
+- Chapter-specific filtering
+
+### Statistics Dashboard
+- Visual cards displaying reading metrics
+- Quiz performance tracking
+- Bookmark and note summaries
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Android Studio Koala or later
+- Android SDK API 34+
+- JDK 11 or higher
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Viking2003/DocsReaderApp.git
+   cd DocsReaderApp
+   ```
+
+2. **Open in Android Studio**
+   - Open Android Studio
+   - Select "Open an Existing Project"
+   - Navigate to the cloned directory
+
+3. **Sync Gradle**
+   - Android Studio will automatically prompt to sync Gradle
+   - Wait for dependencies to download
+
+4. **Build and Run**
+   - Connect an Android device or start an emulator
+   - Click the Run button (▶️) or press `Shift + F10`
+
+### Building from Command Line
+
+```bash
+# Build debug APK
+./gradlew assembleDebug
+
+# Build release APK
+./gradlew assembleRelease
+
+# Build and copy to apks folder (Windows)
+build-apk.bat release
+
+# Build and copy to apks folder (Linux/Mac)
+./build-apk.sh release
+
+# Run tests
+./gradlew test
+./gradlew connectedAndroidTest
+```
+
+### Building for Distribution
+
+To build an APK for distribution:
+
+1. **Windows**: Run `build-apk.bat release`
+2. **Linux/Mac**: Run `./build-apk.sh release`
+
+The APK will be automatically copied to the `apks/` folder, which is tracked in Git for easy distribution.
+
+## 📚 Content Overview
+
+### JNI Documentation
+1. **Chapter 1: Overview of JNI** - Understanding the Java Native Interface
+2. **Chapter 2: Native Method Signatures** - Function name mapping and parameter marshalling
+3. **Chapter 3: JNI Types & String Conversion** - Type mapping and string lifecycle management
+4. **Chapter 4: JNI Local & Global References** - Memory management in native code
+5. **Chapter 5: Threading & Exception Safety** - Multi-threading and error handling
+
+### Android Development Rules
+1. **Rule 1: Modern Android Architecture** - MVVM, Unidirectional Data Flow, and layering
+2. **Rule 2: Component Lifecycles & Leaks** - Lifecycle states and memory leak prevention
+3. **Rule 3: Performance & Coroutines** - Main thread safety and coroutine dispatchers
+4. **Rule 4: Android Security & Intents** - Component export rules and secure storage
+5. **Rule 5: UI/UX & Accessibility** - Touch targets, edge-to-edge, and contrast guidelines
+
+## 🎯 Usage Guide
+
+### Reading
+1. **Navigate Content**: Use tabs to switch between JNI and Android Rules documentation
+2. **Page Navigation**: Swipe left/right or use arrow buttons to navigate pages
+3. **Search**: Enter keywords in the search bar to find content across all pages
+4. **Table of Contents**: Tap the TOC button to jump to specific chapters
+
+### Customization
+1. **Theme Switching**: Tap the theme button to cycle through Sepia → Light → Dark modes
+2. **Font Size**: Use the +/- buttons to adjust text size (12sp - 24sp)
+
+### Learning
+1. **Take Quizzes**: Tap the Quick Quiz button to start a quiz on the current topic
+2. **Bookmark Pages**: Tap the bookmark icon to save important pages
+3. **Add Notes**: Tap the notes button to write personal notes on any page
+
+### Statistics
+1. **View Progress**: Switch to the Stats tab to see reading time, quiz scores, and more
+2. **Track Growth**: Monitor your learning journey over time
+
+## 🧪 Testing
+
+```bash
+# Run unit tests
+./gradlew test
+
+# Run instrumented tests
+./gradlew connectedAndroidTest
+
+# Run specific test class
+./gradlew test --tests "com.example.myfirstandroidapplication.data.DocRepositoryTest"
+```
+
+## 📝 Project Structure
+
+```
+app/
+├── src/
+│   ├── main/
+│   │   ├── java/com/example/myfirstandroidapplication/
+│   │   │   ├── MainActivity.kt              # Main activity with navigation
+│   │   │   ├── ReaderFragment.kt            # Documentation reader
+│   │   │   ├── QuizFragment.kt              # Quiz interface
+│   │   │   ├── StatsFragment.kt            # Statistics dashboard
+│   │   │   ├── adapters/                    # UI adapters
+│   │   │   │   ├── ReaderAdapter.kt
+│   │   │   │   └── ReaderTheme.kt
+│   │   │   ├── data/                        # Data layer
+│   │   │   │   ├── DocRepository.kt         # Document content
+│   │   │   │   ├── QuizRepository.kt        # Quiz questions
+│   │   │   │   └── PreferencesManager.kt    # DataStore wrapper
+│   │   │   ├── models/                      # Data models
+│   │   │   │   ├── DocPage.kt
+│   │   │   │   └── QuizQuestion.kt
+│   │   │   └── dialogs/                     # Dialog components
+│   │   │       ├── NotesDialog.kt
+│   │   │       ├── SearchDialog.kt
+│   │   │       └── TableOfContentsDialog.kt
+│   │   ├── res/                             # Resources
+│   │   │   ├── layout/                      # XML layouts
+│   │   │   ├── values/                      # Strings, colors, themes
+│   │   │   └── drawable/                    # Drawables and icons
+│   │   └── AndroidManifest.xml
+├── build.gradle.kts                         # App-level build config
+└── proguard-rules.pro                       # ProGuard rules
+```
+
+## 🔮 Future Enhancements
+
+- [ ] Export notes and bookmarks to external files
+- [ ] Cloud sync for reading progress across devices
+- [ ] Additional documentation topics
+- [ ] Voice search capability
+- [ ] Text-to-speech for content
+- [ ] Community quiz sharing
+- [ ] Achievements and gamification
+- [ ] Dark mode scheduling customization
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👨‍💻 Author
+
+**Vivek Yadav**
+
+- GitHub: [Viking2003](https://github.com/Viking2003)
+- LinkedIn: [Vivek Yadav](https://linkedin.com/in/vivek-yadav-805052312)
+
+## 📞 Support
+
+For support, please open an issue in the GitHub repository.
+
+---
+
+Built with ❤️ using Kotlin and Jetpack

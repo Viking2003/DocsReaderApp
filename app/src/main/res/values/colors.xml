@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary App Colors -->
+    <color name="primary">#2D3748</color>
+    <color name="primary_dark">#1A202C</color>
+    <color name="accent">#3182CE</color>
+
+    <!-- Kindle Sepia Mode (Warm Paper) -->
+    <color name="kindle_sepia_bg">#FBF0D9</color>
+    <color name="kindle_sepia_text">#2C221E</color>
+    <color name="kindle_sepia_subtext">#6E5A4D</color>
+    <color name="kindle_sepia_code_bg">#F4E4C1</color>
+    <color name="kindle_sepia_card">#F7E7CD</color>
+    <color name="kindle_sepia_divider">#E6D2B5</color>
+
+    <!-- Kindle Light Mode (Pure White Paper) -->
+    <color name="kindle_light_bg">#FAFAFA</color>
+    <color name="kindle_light_text">#1A1A1A</color>
+    <color name="kindle_light_subtext">#555555</color>
+    <color name="kindle_light_code_bg">#EDF2F7</color>
+    <color name="kindle_light_card">#FFFFFF</color>
+    <color name="kindle_light_divider">#E2E8F0</color>
+
+    <!-- Kindle Night Mode (Dark Paper) -->
+    <color name="kindle_dark_bg">#121212</color>
+    <color name="kindle_dark_text">#E0E0E0</color>
+    <color name="kindle_dark_subtext">#A0A0A0</color>
+    <color name="kindle_dark_code_bg">#1E1E1E</color>
+    <color name="kindle_dark_card">#1E1E1E</color>
+    <color name="kindle_dark_divider">#2D2D2D</color>
+
+    <!-- System Standard Colors -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Search Highlight Colors -->
+    <color name="search_highlight_sepia">#FFE082</color>
+    <color name="search_highlight_light">#FFEB3B</color>
+    <color name="search_highlight_dark">#FFD54F</color>
+</resources>

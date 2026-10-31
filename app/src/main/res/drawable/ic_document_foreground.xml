@@ -1,0 +1,38 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Document Page Outline & Body -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M32,22 C29.79,22 28,23.79 28,26 L28,82 C28,84.21 29.79,86 32,86 L76,86 C78.21,86 80,84.21 80,82 L80,38 L64,22 L32,22 Z" />
+
+    <!-- Folded Page Corner -->
+    <path
+        android:fillColor="#E0E0E0"
+        android:pathData="M64,22 L80,38 L64,38 Z" />
+
+    <!-- Document Text Lines -->
+    <path
+        android:fillColor="#3F51B5"
+        android:pathData="M36,44 H72 V48 H36 Z" />
+    <path
+        android:fillColor="#757575"
+        android:pathData="M36,52 H68 V55 H36 Z" />
+    <path
+        android:fillColor="#757575"
+        android:pathData="M36,59 H72 V62 H36 Z" />
+    <path
+        android:fillColor="#757575"
+        android:pathData="M36,66 H60 V69 H36 Z" />
+    <path
+        android:fillColor="#757575"
+        android:pathData="M36,73 H66 V76 H36 Z" />
+
+    <!-- Bookmark Ribbon -->
+    <path
+        android:fillColor="#FF5722"
+        android:pathData="M42,22 L52,22 L52,36 L47,32 L42,36 Z" />
+</vector>

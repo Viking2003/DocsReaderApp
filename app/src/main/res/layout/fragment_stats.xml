@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/statsRootContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/kindle_sepia_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/tvStatsTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📊 Reading Statistics"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Reading Time Card -->
+        <LinearLayout
+            android:id="@+id/cardReadingTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_callout_box"
+            android:padding="20dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/tvReadingTimeLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total Reading Time"
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tvTotalReadingTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0 min"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="@color/accent" />
+
+        </LinearLayout>
+
+        <!-- Quizzes Card -->
+        <LinearLayout
+            android:id="@+id/cardQuizzes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_callout_box"
+            android:padding="20dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/tvQuizzesLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Quizzes Completed"
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tvTotalQuizzes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0 quizzes completed"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="@color/accent" />
+
+        </LinearLayout>
+
+        <!-- Average Score Card -->
+        <LinearLayout
+            android:id="@+id/cardAverageScore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_callout_box"
+            android:padding="20dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/tvAverageScoreLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Average Quiz Score"
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tvAverageScore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0%"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="@color/accent" />
+
+        </LinearLayout>
+
+        <!-- Bookmarks Card -->
+        <LinearLayout
+            android:id="@+id/cardBookmarks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_callout_box"
+            android:padding="20dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/tvBookmarksLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Pages Bookmarked"
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tvTotalBookmarks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0 pages bookmarked"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="@color/accent" />
+
+        </LinearLayout>
+
+        <!-- Notes Card -->
+        <LinearLayout
+            android:id="@+id/cardNotes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_callout_box"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/tvNotesLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Notes Taken"
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tvTotalNotes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0 notes taken"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="@color/accent" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

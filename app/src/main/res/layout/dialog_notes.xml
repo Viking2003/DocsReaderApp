@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <!-- Header with Title and Close Button -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:id="@+id/tvDialogTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Add Note"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#1A202C" />
+
+        <ImageButton
+            android:id="@+id/btnClose"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_close"
+            android:contentDescription="Close"
+            app:tint="#1A202C" />
+    </LinearLayout>
+
+    <!-- Note EditText -->
+    <EditText
+        android:id="@+id/etNote"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:hint="Write your notes here..."
+        android:gravity="top|start"
+        android:padding="12dp"
+        android:background="@drawable/bg_code_box"
+        android:textSize="15sp"
+        android:textColor="#1A202C" />
+
+    <!-- Action Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDelete"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:text="Delete"
+            android:textAllCaps="false"
+            android:textSize="14sp"
+            android:insetLeft="0dp"
+            android:insetRight="0dp"
+            android:paddingHorizontal="4dp"
+            android:visibility="gone"
+            app:backgroundTint="#C53030"
+            app:cornerRadius="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSave"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Save Note"
+            android:textAllCaps="false"
+            android:textSize="14sp"
+            android:insetLeft="0dp"
+            android:insetRight="0dp"
+            android:paddingHorizontal="4dp"
+            app:backgroundTint="@color/accent"
+            app:cornerRadius="8dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
