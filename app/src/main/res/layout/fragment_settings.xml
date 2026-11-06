@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/settingsScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/kindle_sepia_bg"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:id="@+id/settingsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Account / Profile Section -->
+        <TextView
+            android:id="@+id/tvSectionAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Account &amp; Profile"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/kindle_sepia_text"
+            android:layout_marginBottom="12dp" />
+
+        <LinearLayout
+            android:id="@+id/cardAccountProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_callout_box"
+            android:padding="16dp"
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                android:id="@+id/tvAccountStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Not signed in (Anonymous)"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/kindle_sepia_text" />
+
+            <TextView
+                android:id="@+id/tvAccountEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sign in to display your real name on quizzes and sync your progress across devices."
+                android:textSize="13sp"
+                android:textColor="@color/kindle_sepia_subtext"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGoogleSignIn"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sign in with Google"
+                android:textSize="14sp"
+                app:backgroundTint="@color/accent"
+                app:cornerRadius="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGoogleSignOut"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sign Out"
+                android:textSize="14sp"
+                android:visibility="gone"
+                android:layout_marginTop="4dp"
+                app:cornerRadius="8dp" />
+        </LinearLayout>
+
+        <!-- Theme Settings Section -->
+        <TextView
+            android:id="@+id/tvSectionTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Theme Settings"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/kindle_sepia_text"
+            android:layout_marginBottom="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:id="@+id/tvLabelAutoTheme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Auto Theme by Time"
+                android:textSize="16sp"
+                android:textColor="@color/kindle_sepia_text" />
+
+            <Switch
+                android:id="@+id/switchAutoTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvCurrentTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sepia Mode"
+            android:textSize="14sp"
+            android:textColor="@color/kindle_sepia_subtext"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:id="@+id/tvLabelManualTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Manual Theme Selection"
+            android:textSize="16sp"
+            android:textColor="@color/kindle_sepia_text"
+            android:layout_marginBottom="8dp" />
+
+        <Spinner
+            android:id="@+id/spinnerThemeMode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Cloud Sync Section -->
+        <TextView
+            android:id="@+id/tvSectionCloud"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cloud Sync"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/kindle_sepia_text"
+            android:layout_marginBottom="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:id="@+id/tvLabelCloudSync"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Enable Cloud Sync"
+                android:textSize="16sp"
+                android:textColor="@color/kindle_sepia_text" />
+
+            <Switch
+                android:id="@+id/switchCloudSync"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvSyncStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sync Disabled"
+            android:textSize="14sp"
+            android:textColor="@color/kindle_sepia_subtext"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Export Section -->
+        <TextView
+            android:id="@+id/tvSectionExport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Export Data"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/kindle_sepia_text"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:id="@+id/tvLabelExportSubtext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Export your bookmarks and notes to external files"
+            android:textSize="14sp"
+            android:textColor="@color/kindle_sepia_subtext"
+            android:layout_marginBottom="12dp" />
+
+        <Button
+            android:id="@+id/btnExportJSON"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Export as JSON"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/btnExportCSV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Export as CSV"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/btnExportMarkdown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Export as Markdown" />
+
+    </LinearLayout>
+</ScrollView>

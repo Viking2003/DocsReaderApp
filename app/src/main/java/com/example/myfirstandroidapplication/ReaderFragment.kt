@@ -20,8 +20,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.myfirstandroidapplication.adapters.ReaderAdapter
 import com.example.myfirstandroidapplication.adapters.ReaderTheme
+import com.example.myfirstandroidapplication.data.AchievementManager
 import com.example.myfirstandroidapplication.data.DocRepository
 import com.example.myfirstandroidapplication.data.PreferencesManager
+import kotlinx.coroutines.flow.first
 import com.example.myfirstandroidapplication.models.DocCategory
 import com.example.myfirstandroidapplication.models.DocPage
 import com.google.android.material.progressindicator.LinearProgressIndicator
@@ -88,6 +90,9 @@ class ReaderFragment : Fragment(R.layout.fragment_reader) {
         loadBookmarks()
         loadReadingProgress()
 
+        // Ensure tab and data are synced when fragment becomes visible
+        syncTabAndData()
+
         // Start reading time tracking
         pageStartTime = System.currentTimeMillis()
         readingTimeHandler = Handler(Looper.getMainLooper())
@@ -99,6 +104,18 @@ class ReaderFragment : Fragment(R.layout.fragment_reader) {
                 setupViewPager()
                 setupListeners()
             }
+        }
+    }
+
+    private fun syncTabAndData() {
+        // Ensure the tab matches the current category index
+        tabLayout?.selectTab(tabLayout?.getTabAt(currentCategoryIndex))
+        // Ensure the data matches the current category
+        currentPages = when (currentCategoryIndex) {
+            0 -> DocRepository.jniPages
+            1 -> DocRepository.androidRulesPages
+            2 -> DocRepository.flutterPages
+            else -> DocRepository.jniPages
         }
     }
 
@@ -133,13 +150,19 @@ class ReaderFragment : Fragment(R.layout.fragment_reader) {
     private fun setupTabs() {
         tabLayout?.addTab(tabLayout!!.newTab().setText("1. JNI Documentation"))
         tabLayout?.addTab(tabLayout!!.newTab().setText("2. Android Principles"))
+        tabLayout?.addTab(tabLayout!!.newTab().setText("3. Flutter Development"))
 
         tabLayout?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val position = tab?.position ?: 0
                 if (position != currentCategoryIndex) {
                     currentCategoryIndex = position
-                    currentPages = if (position == 0) DocRepository.jniPages else DocRepository.androidRulesPages
+                    currentPages = when (position) {
+                        0 -> DocRepository.jniPages
+                        1 -> DocRepository.androidRulesPages
+                        2 -> DocRepository.flutterPages
+                        else -> DocRepository.jniPages
+                    }
                     if (::readerAdapter.isInitialized) {
                         readerAdapter.updatePages(currentPages)
                         readerAdapter.setSearchQuery(null) // Clear search highlight when switching tabs
@@ -165,10 +188,6 @@ class ReaderFragment : Fragment(R.layout.fragment_reader) {
                 updatePageIndicator(position)
                 saveCurrentProgress(position)
                 checkBookmarkStatus(position)
-                // Clear search highlight when navigating to a different page
-                if (::readerAdapter.isInitialized) {
-                    readerAdapter.setSearchQuery(null)
-                }
             }
         })
 
@@ -213,6 +232,7 @@ class ReaderFragment : Fragment(R.layout.fragment_reader) {
                 } else {
                     preferencesManager.addBookmark(page.id)
                     btnBookmark?.setImageResource(R.drawable.ic_bookmark)
+                    AchievementManager.getInstance(requireContext()).trackBookmarkCreated()
                     Toast.makeText(requireContext(), "Page bookmarked", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -250,7 +270,13 @@ class ReaderFragment : Fragment(R.layout.fragment_reader) {
                 main.mainNavTabs.selectTab(main.mainNavTabs.getTabAt(1))
                 // Also filter quiz by current category
                 val quizFrag = main.supportFragmentManager.findFragmentByTag("QUIZ") as? QuizFragment
-                quizFrag?.filterQuestionsByChapter(if (currentCategoryIndex == 0) DocCategory.JNI else DocCategory.ANDROID_RULES)
+                val category = when (currentCategoryIndex) {
+                    0 -> DocCategory.JNI
+                    1 -> DocCategory.ANDROID_RULES
+                    2 -> DocCategory.FLUTTER
+                    else -> DocCategory.JNI
+                }
+                quizFrag?.filterQuestionsByChapter(category)
             }
         }
 
@@ -335,6 +361,9 @@ class ReaderFragment : Fragment(R.layout.fragment_reader) {
     private fun saveCurrentProgress(position: Int) {
         CoroutineScope(Dispatchers.IO).launch {
             preferencesManager.saveReadingProgress(currentCategoryIndex, position)
+            if (preferencesManager.cloudSyncEnabled.first()) {
+                preferencesManager.syncToCloud()
+            }
         }
     }
 

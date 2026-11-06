@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "241382234742",
+    "project_id": "docs-reader-5c789",
+    "storage_bucket": "docs-reader-5c789.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:241382234742:android:d7a2473fc08eed7cde9d57",
+        "android_client_info": {
+          "package_name": "com.example.myfirstandroidapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "241382234742-232876j3l96tuajjd8j3f3mpp7utqngp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.myfirstandroidapplication",
+            "certificate_hash": "067da36771926057a7ab2f31c88689c933f911a2"
+          }
+        },
+        {
+          "client_id": "241382234742-urj5f6kblhbuuiqjvk2cbs0d6oih1amg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHxU32Aol_X5snZcpIPHbL9y2t20cKgl8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "241382234742-urj5f6kblhbuuiqjvk2cbs0d6oih1amg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

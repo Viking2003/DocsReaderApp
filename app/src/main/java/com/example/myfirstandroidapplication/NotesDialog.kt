@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.example.myfirstandroidapplication.adapters.ReaderTheme
+import com.example.myfirstandroidapplication.data.AchievementManager
 import com.example.myfirstandroidapplication.data.PreferencesManager
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.CoroutineScope
@@ -72,6 +73,9 @@ class NotesDialog : DialogFragment() {
             val noteText = etNote.text.toString()
             CoroutineScope(Dispatchers.Main).launch {
                 preferencesManager.saveNote(pageId, noteText)
+                if (noteText.isNotEmpty()) {
+                    AchievementManager.getInstance(requireContext()).trackNoteCreated()
+                }
                 onNoteSavedListener?.invoke()
                 dismiss()
             }

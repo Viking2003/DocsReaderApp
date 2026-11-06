@@ -2,7 +2,8 @@ package com.example.myfirstandroidapplication.models
 
 enum class DocCategory(val displayName: String) {
     JNI("JNI Documentation"),
-    ANDROID_RULES("Android Principles & Rules")
+    ANDROID_RULES("Android Principles & Rules"),
+    FLUTTER("Flutter Development")
 }
 
 data class DocPage(

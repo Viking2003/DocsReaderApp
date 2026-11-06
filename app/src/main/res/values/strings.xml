@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">DocReader - Android &amp; JNI Guide</string>
+    <string name="default_web_client_id">241382234742-urj5f6kblhbuuiqjvk2cbs0d6oih1amg.apps.googleusercontent.com</string>
 </resources>

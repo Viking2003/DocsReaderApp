@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/authStartupRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@color/kindle_sepia_bg"
+    android:padding="24dp">
+
+    <ImageView
+        android:id="@+id/ivAuthAppIcon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/ic_book"
+        app:tint="@color/accent"
+        android:contentDescription="@string/app_name" />
+
+    <TextView
+        android:id="@+id/tvAuthWelcomeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Welcome to DocReader"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/kindle_sepia_text" />
+
+    <TextView
+        android:id="@+id/tvAuthWelcomeSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="Choose how you'd like to sign in to access community quizzes, cloud sync, and personal progress."
+        android:textSize="14sp"
+        android:textColor="@color/kindle_sepia_subtext" />
+
+    <LinearLayout
+        android:id="@+id/cardAuthOptions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_callout_box"
+        android:padding="20dp"
+        android:layout_marginTop="32dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnStartupGoogleSignIn"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:text="Sign in with Google"
+            android:textAllCaps="false"
+            android:textSize="15sp"
+            app:backgroundTint="@color/accent"
+            app:cornerRadius="10dp" />
+
+        <TextView
+            android:id="@+id/tvGoogleSignInHint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:text="Displays your real name on quizzes and syncs your data"
+            android:textSize="12sp"
+            android:textColor="@color/kindle_sepia_subtext" />
+
+        <View
+            android:id="@+id/dividerAuth"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#D1D5DB"
+            android:layout_marginVertical="18dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnStartupAnonymous"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:text="Continue as Guest (Anonymous)"
+            android:textAllCaps="false"
+            android:textSize="15sp"
+            android:textColor="@color/kindle_sepia_text"
+            app:cornerRadius="10dp" />
+
+        <TextView
+            android:id="@+id/tvAnonymousHint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:text="Browse and play quizzes right away without signing in"
+            android:textSize="12sp"
+            android:textColor="@color/kindle_sepia_subtext" />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressStartupAuth"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="24dp"
+        android:visibility="gone"
+        android:indeterminateTint="@color/accent" />
+
+</LinearLayout>

@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/editorRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/kindle_sepia_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/tvEditorTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="✍️ Create Community Quiz"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/kindle_sepia_text" />
+
+        <TextView
+            android:id="@+id/tvAuthorPreview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Publishing as: ..."
+            android:textSize="13sp"
+            android:textColor="@color/kindle_sepia_subtext"
+            android:layout_marginTop="4dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilQuizTitle"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Quiz Title">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etQuizTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilQuizDescription"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="Description">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etQuizDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minLines="2"
+                android:gravity="top" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tvLabelCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Category"
+            android:textSize="14sp"
+            android:textColor="@color/kindle_sepia_subtext" />
+
+        <Spinner
+            android:id="@+id/spinnerCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:minHeight="40dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/kindle_sepia_divider" />
+
+        <TextView
+            android:id="@+id/tvLabelQuestions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Questions (Min 1)"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/kindle_sepia_text" />
+
+        <!-- Simplified: One question editor area that can be cleared and added to a list -->
+        <LinearLayout
+            android:id="@+id/questionEditorCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="vertical"
+            android:background="@drawable/bg_callout_box"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tvQuestionCountLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Current Question Details"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/accent" />
+
+            <!-- Question category automatically follows main quiz category -->
+            <TextView
+                android:id="@+id/tvQuestionCategoryDisplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Category: JNI Documentation"
+                android:textSize="13sp"
+                android:textColor="@color/kindle_sepia_subtext"
+                android:visibility="gone" />
+
+            <EditText
+                android:id="@+id/etQuestionText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:hint="Question Text"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/etOption0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Option 1 (Correct Answer)"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/etOption1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:hint="Option 2"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/etOption2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:hint="Option 3"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/etOption3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:hint="Option 4"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/etExplanation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Explanation"
+                android:textSize="14sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddQuestionToList"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Add Question to Quiz"
+                android:textAllCaps="false" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvAddedQuestionsCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Questions added: 0"
+            android:textColor="@color/kindle_sepia_subtext" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnUploadQuiz"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Upload to Community 🚀"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                app:cornerRadius="12dp"
+                app:backgroundTint="@color/accent" />
+
+            <ProgressBar
+                android:id="@+id/uploadProgress"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:indeterminateTint="#FFFFFF" />
+        </FrameLayout>
+
+    </LinearLayout>
+</ScrollView>

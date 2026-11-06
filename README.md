@@ -9,7 +9,7 @@ A modern, feature-rich Android documentation reader built with Kotlin and Jetpac
 
 ## 📥 Download APK
 
-**Latest Release**: [app-release.apk](apks/app-release.apk) (v1.0)
+**Latest Release**: [app-release.apk](apks/app-release.apk) (v2.0)
 
 ### Quick Installation
 1. Download the APK from the [apks](apks/) folder
@@ -30,12 +30,15 @@ A modern, feature-rich Android documentation reader built with Kotlin and Jetpac
 ## ✨ Features
 
 ### 📖 Documentation Reader
-- **Dual Content Tracks**: Explore comprehensive documentation on:
+- **Triple Content Tracks**: Explore comprehensive documentation on:
   - JNI (Java Native Interface) - 5 chapters covering native code integration
   - Android Development Rules - 5 essential architecture and best practice rules
+  - Flutter Development - 5 chapters on modern cross-platform development
 - **Smooth Navigation**: Swipe between pages with ViewPager2
 - **Table of Contents**: Quick-jump to any chapter or section
 - **Search Functionality**: Full-text search with real-time highlighting
+- **Voice Search**: Use voice commands to search content
+- **Text-to-Speech**: Listen to content with built-in TTS
 - **Reading Progress**: Automatically track and resume where you left off
 
 ### 🎨 Reading Experience
@@ -64,6 +67,19 @@ A modern, feature-rich Android documentation reader built with Kotlin and Jetpac
 - **Automatic State Saving**: Preserves reading progress, bookmarks, and notes
 - **Process Death Recovery**: Survives system reclamation and background termination
 
+### 🏆 Gamification & Achievements
+- **XP System**: Earn experience points for reading, quizzes, and more
+- **Level Progression**: Level up as you learn
+- **13 Unique Achievements**: Unlock badges for various accomplishments
+- **Daily Streaks**: Track consecutive days of learning
+- **Progress Tracking**: Visual progress bars for each achievement
+
+### ⚙️ Settings & Customization
+- **Theme Scheduling**: Customize automatic theme switching times
+- **Manual Theme Selection**: Choose between Light, Sepia, and Dark modes
+- **Export Data**: Export bookmarks and notes to JSON, CSV, or Markdown
+- **Cloud Sync Ready**: Infrastructure for future cloud synchronization
+
 ## 🏗️ Architecture
 
 This application follows modern Android development principles:
@@ -74,16 +90,29 @@ This application follows modern Android development principles:
 │  (Tab Navigation & Theme Management)   │
 └──────────────┬──────────────────────────┘
                │
-       ┌───────┴───────┬────────────┬────────────┐
-       │               │            │            │
-┌──────▼──────┐ ┌─────▼─────┐ ┌────▼────┐ ┌────▼────┐
-│   Reader    │ │   Quiz    │ │  Stats  │ │  Data   │
-│  Fragment   │ │ Fragment  │ │Fragment │ │ Layer   │
-└──────┬──────┘ └─────┬─────┘ └────┬────┘ └────┬────┘
-       │              │            │            │
-┌──────▼──────┐ ┌─────▼─────┐       │      ┌─────▼─────┐
-│  ViewPager2 │ │  Quiz     │       │      │ Preferences│
-│  + Adapter  │ │ Repository│       │      │  Manager  │
+       ┌───────┴───────┬────────────┬────────────┬────────────┐
+       │               │            │            │            │
+┌──────▼──────┐ ┌─────▼─────┐ ┌────▼────┐ ┌────▼────┐ ┌────▼────┐
+│   Reader    │ │   Quiz    │ │  Stats  │ │Achieve-  │ │Settings │
+│  Fragment   │ │ Fragment  │ │Fragment │ │ments     │ │Fragment │
+└──────┬──────┘ └─────┬─────┘ └────┬────┘ └────┬────┘ └────┬────┘
+       │              │            │            │            │
+┌──────▼──────┐ ┌─────▼─────┐       │      ┌─────▼─────┐  │
+│  ViewPager2 │ │  Quiz     │       │      │Achievement│  │
+│  + Adapter  │ │ Repository│       │      │  Manager  │  │
+└──────┬──────┘ └─────┬─────┘       │      └───────────┘  │
+       │              │            │            │            │
+┌──────▼──────┐ ┌─────▼─────┐       │      ┌─────▼─────┐  │
+│  Doc        │ │  Doc      │       │      │Export     │  │
+│ Repository  │ │ Quiz Repo │       │      │Manager    │  │
+└─────────────┘ └───────────┘       │      └───────────┘  │
+                                     │                     │
+                            ┌────────▼─────────────────────┘
+                            │
+                     ┌──────▼──────┐
+                     │ Preferences │
+                     │  Manager    │
+                     └─────────────┘
 └──────┬──────┘ └───────────┘       │      └───────────┘
        │                            │
 ┌──────▼──────┐                     │
@@ -220,6 +249,13 @@ The APK will be automatically copied to the `apks/` folder, which is tracked in 
 3. **Rule 3: Performance & Coroutines** - Main thread safety and coroutine dispatchers
 4. **Rule 4: Android Security & Intents** - Component export rules and secure storage
 5. **Rule 5: UI/UX & Accessibility** - Touch targets, edge-to-edge, and contrast guidelines
+
+### Flutter Development
+1. **Chapter 1: Flutter Architecture Overview** - Widget tree, build method & rendering pipeline
+2. **Chapter 2: State Management in Flutter** - setState, Provider, Riverpod & Bloc patterns
+3. **Chapter 3: Flutter Navigation & Routing** - Navigator 2.0, named routes & Auto Route
+4. **Chapter 4: Flutter Animations** - Implicit, explicit & Hero animations
+5. **Chapter 5: Flutter Platform Integration** - Platform channels, method channels & plugins
 
 ## 🎯 Usage Guide
 

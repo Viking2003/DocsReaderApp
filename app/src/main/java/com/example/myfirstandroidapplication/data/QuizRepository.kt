@@ -291,4 +291,77 @@ object QuizRepository {
             difficulty = QuizDifficulty.EASY
         )
     )
+
+    val flutterQuestions: List<QuizQuestion> = listOf(
+        QuizQuestion(
+            id = 21,
+            category = DocCategory.FLUTTER,
+            questionText = "What is the primary building block of Flutter UI?",
+            options = listOf(
+                "Components",
+                "Widgets",
+                "Views",
+                "Elements"
+            ),
+            correctAnswerIndex = 1,
+            explanation = "In Flutter, everything is a widget. Widgets describe what your UI should look like given its current configuration and state.",
+            difficulty = QuizDifficulty.EASY
+        ),
+        QuizQuestion(
+            id = 22,
+            category = DocCategory.FLUTTER,
+            questionText = "Which state management solution is officially recommended by the Flutter team?",
+            options = listOf(
+                "Bloc",
+                "Riverpod",
+                "Provider",
+                "GetX"
+            ),
+            correctAnswerIndex = 2,
+            explanation = "Provider is officially recommended by the Flutter team for state management, though other solutions like Bloc and Riverpod are also popular.",
+            difficulty = QuizDifficulty.MEDIUM
+        ),
+        QuizQuestion(
+            id = 23,
+            category = DocCategory.FLUTTER,
+            questionText = "What method must be implemented to build a widget's UI?",
+            options = listOf(
+                "render()",
+                "create()",
+                "build()",
+                "make()"
+            ),
+            correctAnswerIndex = 2,
+            explanation = "The build() method is called by Flutter to describe the widget's UI in terms of other, lower-level widgets.",
+            difficulty = QuizDifficulty.EASY
+        ),
+        QuizQuestion(
+            id = 24,
+            category = DocCategory.FLUTTER,
+            questionText = "What is the purpose of the initState() method in a StatefulWidget?",
+            options = listOf(
+                "To build the widget's UI",
+                "To initialize state before the first build",
+                "To dispose of resources",
+                "To handle user input"
+            ),
+            correctAnswerIndex = 1,
+            explanation = "initState() is called exactly once when the widget is first inserted into the tree, making it ideal for one-time initialization.",
+            difficulty = QuizDifficulty.MEDIUM
+        ),
+        QuizQuestion(
+            id = 25,
+            category = DocCategory.FLUTTER,
+            questionText = "Which class is used for bidirectional communication between Flutter and native code?",
+            options = listOf(
+                "EventChannel",
+                "MethodChannel",
+                "BasicMessageChannel",
+                "PlatformChannel"
+            ),
+            correctAnswerIndex = 1,
+            explanation = "MethodChannel is used for bidirectional communication to invoke native methods from Flutter and receive results back.",
+            difficulty = QuizDifficulty.HARD
+        )
+    )
 }

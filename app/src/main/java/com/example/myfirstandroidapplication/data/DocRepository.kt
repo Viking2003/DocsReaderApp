@@ -337,5 +337,286 @@ object DocRepository {
         )
     )
 
-    fun getAllPages(): List<DocPage> = jniPages + androidRulesPages
+    val flutterPages: List<DocPage> = listOf(
+        DocPage(
+            id = 11,
+            category = DocCategory.FLUTTER,
+            chapterTitle = "Chapter 1: Flutter Architecture Overview",
+            subtitle = "Widget Tree, Build Method & Rendering Pipeline • 4 min read",
+            bodyText = """
+                Flutter is a UI toolkit for building natively compiled applications for mobile, web, and desktop from a single codebase. At its core, Flutter uses a declarative approach to building UIs through widgets.
+
+                Key Architecture Components:
+                1. Widget Tree: Every UI element is a widget, organized in a tree structure
+                2. Build Method: Widgets describe their UI in their build() method
+                3. Element Tree: The framework maintains an element tree that instantiates and updates widgets
+                4. RenderObject Tree: Handles actual rendering and layout calculations
+
+                Flutter's Rendering Pipeline:
+                • Build Phase: Create widget tree
+                • Layout Phase: Calculate sizes and positions
+                • Paint Phase: Generate display lists
+                • Composite Phase: Send to GPU for rendering
+            """.trimIndent(),
+            codeSnippet = """
+                // Basic Flutter Widget Structure
+                class MyWidget extends StatelessWidget {
+                  @override
+                  Widget build(BuildContext context) {
+                    return Scaffold(
+                      appBar: AppBar(title: Text('My App')),
+                      body: Center(
+                        child: Text('Hello, Flutter!'),
+                      ),
+                    );
+                  }
+                }
+            """.trimIndent(),
+            codeTitle = "FLUTTER WIDGET EXAMPLE",
+            keyTakeaway = "Flutter's everything-is-a-widget paradigm enables rapid UI development through composition and reusability."
+        ),
+        DocPage(
+            id = 12,
+            category = DocCategory.FLUTTER,
+            chapterTitle = "Chapter 2: State Management in Flutter",
+            subtitle = "setState, Provider, Riverpod & Bloc Patterns • 5 min read",
+            bodyText = """
+                State management is crucial in Flutter apps to manage data that changes over time and reflects those changes in the UI.
+
+                State Management Approaches:
+
+                1. setState: Built-in for simple local state
+                • Use for component-level state
+                • Fast and easy to implement
+                • Not suitable for complex app-wide state
+
+                2. Provider: Recommended by Flutter team
+                • Lightweight dependency injection
+                • Easy to learn and use
+                • Good for small to medium apps
+
+                3. Riverpod: Improved version of Provider
+                • Compile-time safety
+                • Better performance
+                • More flexible composition
+
+                4. Bloc: Business Logic Component
+                • Excellent for complex apps
+                • Clear separation of concerns
+                • Event-driven architecture
+            """.trimIndent(),
+            codeSnippet = """
+                // Provider Example
+                class CounterProvider extends ChangeNotifier {
+                  int _count = 0;
+                  int get count => _count;
+
+                  void increment() {
+                    _count++;
+                    notifyListeners();
+                  }
+                }
+
+                // Usage in Widget
+                Consumer<CounterProvider>(
+                  builder: (context, provider, child) {
+                    return Text('Count: ' + provider.count.toString());
+                  },
+                )
+            """.trimIndent(),
+            codeTitle = "PROVIDER STATE MANAGEMENT",
+            keyTakeaway = "Choose state management based on app complexity: setState for simple state, Provider/Riverpod for medium apps, Bloc for complex applications."
+        ),
+        DocPage(
+            id = 13,
+            category = DocCategory.FLUTTER,
+            chapterTitle = "Chapter 3: Flutter Navigation & Routing",
+            subtitle = "Navigator 2.0, Named Routes & Auto Route • 4 min read",
+            bodyText = """
+                Flutter provides flexible navigation options to move between screens in your application.
+
+                Navigation Methods:
+
+                1. Imperative Navigation (Navigator 1.0):
+                • Simple and direct
+                • Push/pop stack-based navigation
+                • Good for small apps
+
+                2. Declarative Navigation (Navigator 2.0):
+                • State-driven navigation
+                • Better for complex routing
+                • Web and deep link support
+
+                3. Auto Route (Third-party):
+                • Type-safe navigation
+                • Code generation
+                • Excellent for large projects
+
+                Key Concepts:
+                • Routes: Screens or pages in your app
+                • Navigator: Manages a stack of routes
+                • RouteSettings: Metadata for routes
+                • OnGenerateRoute: Dynamic route generation
+            """.trimIndent(),
+            codeSnippet = """
+                // Imperative Navigation
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SecondScreen()),
+                );
+
+                // Named Routes
+                MaterialApp(
+                  routes: {
+                    '/': (context) => HomeScreen(),
+                    '/details': (context) => DetailsScreen(),
+                  },
+                );
+
+                // Navigate with named route
+                Navigator.pushNamed(context, '/details');
+            """.trimIndent(),
+            codeTitle = "FLUTTER NAVIGATION PATTERNS",
+            keyTakeaway = "Start with Navigator 1.0 for simple apps, migrate to Navigator 2.0 or Auto Route for complex navigation requirements."
+        ),
+        DocPage(
+            id = 14,
+            category = DocCategory.FLUTTER,
+            chapterTitle = "Chapter 4: Flutter Animations",
+            subtitle = "Implicit, Explicit & Hero Animations • 5 min read",
+            bodyText = """
+                Flutter provides powerful animation APIs to create smooth, performant UI animations.
+
+                Animation Types:
+
+                1. Implicit Animations:
+                • AnimatedContainer, AnimatedOpacity, etc.
+                • Automatically animate between values
+                • Simple to implement
+                • Less control over animation lifecycle
+
+                2. Explicit Animations:
+                • AnimationController and Tween
+                • Full control over animation
+                • Can create complex animations
+                • Requires more boilerplate
+
+                3. Hero Animations:
+                • Shared element transitions
+                • Automatic morphing between screens
+                • Built-in Flutter support
+                • Great for list/detail flows
+
+                Animation Controllers:
+                • Manage animation lifecycle
+                • vsync: Sync with screen refresh rate
+                • forward(), reverse(), repeat()
+            """.trimIndent(),
+            codeSnippet = """
+                // Explicit Animation Example
+                class FadeInWidget extends StatefulWidget {
+                  @override
+                  _FadeInWidgetState createState() => _FadeInWidgetState();
+                }
+
+                class _FadeInWidgetState extends State<FadeInWidget>
+                    with SingleTickerProviderStateMixin {
+                  late AnimationController _controller;
+                  late Animation<double> _animation;
+
+                  @override
+                  void initState() {
+                    super.initState();
+                    _controller = AnimationController(
+                      duration: Duration(seconds: 2),
+                      vsync: this,
+                    );
+                    _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
+                    _controller.forward();
+                  }
+
+                  @override
+                  Widget build(BuildContext context) {
+                    return FadeTransition(
+                      opacity: _animation,
+                      child: Text('Fade In'),
+                    );
+                  }
+                }
+            """.trimIndent(),
+            codeTitle = "EXPLICIT FLUTTER ANIMATION",
+            keyTakeaway = "Use implicit animations for simple transitions, explicit animations for complex custom animations, and Hero animations for shared element transitions."
+        ),
+        DocPage(
+            id = 15,
+            category = DocCategory.FLUTTER,
+            chapterTitle = "Chapter 5: Flutter Platform Integration",
+            subtitle = "Platform Channels, Method Channels & Plugins • 5 min read",
+            bodyText = """
+                Flutter provides platform channels to communicate with native code (Android Kotlin/Java, iOS Swift/Objective-C).
+
+                Platform Channel Types:
+
+                1. MethodChannel: Bidirectional communication
+                • Invoke native methods from Flutter
+                • Send messages back to Flutter
+                • Best for feature-specific integration
+
+                2. EventChannel: Event streams from native
+                • Unidirectional native-to-Flutter
+                • Stream-based communication
+                • Good for sensors, notifications
+
+                3. BasicMessageChannel: Raw message passing
+                • Structured message encoding
+                • Most flexible but verbose
+                • Rarely needed
+
+                Using Plugins:
+                • pub.dev has thousands of plugins
+                • Wraps platform channels
+                • Provides Dart API
+                • Easy to integrate
+
+                Common Use Cases:
+                • Camera, GPS, Bluetooth
+                • Native UI components
+                • Platform-specific APIs
+            """.trimIndent(),
+            codeSnippet = """
+                // MethodChannel Example
+                const platform = MethodChannel('com.example.app/native');
+
+                // Call native method
+                Future<String> getBatteryLevel() async {
+                  try {
+                    final int batteryResult = await platform.invokeMethod('getBatteryLevel');
+                    return 'Battery level: ' + batteryResult.toString() + '%';
+                  } catch (e) {
+                    return 'Failed to get battery level.';
+                  }
+                }
+
+                // Android Native Implementation
+                class MainActivity: FlutterActivity() {
+                  private val CHANNEL = "com.example.app/native"
+
+                  override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+                    super.configureFlutterEngine(flutterEngine)
+                    MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL)
+                      .setMethodCallHandler { call, result ->
+                        if (call.method == "getBatteryLevel") {
+                          val batteryLevel = getBatteryLevel()
+                          result.success(batteryLevel)
+                        }
+                      }
+                  }
+                }
+            """.trimIndent(),
+            codeTitle = "PLATFORM CHANNEL INTEGRATION",
+            keyTakeaway = "Prefer existing plugins from pub.dev before writing custom platform channels. Only create custom channels when plugins don't meet your needs."
+        )
+    )
+
+    fun getAllPages(): List<DocPage> = jniPages + androidRulesPages + flutterPages
 }

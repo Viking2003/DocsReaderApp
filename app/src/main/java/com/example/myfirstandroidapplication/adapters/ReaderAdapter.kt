@@ -48,8 +48,10 @@ class ReaderAdapter(
     }
 
     fun setSearchQuery(query: String?) {
-        searchQuery = query
-        notifyDataSetChanged()
+        if (searchQuery != query) {
+            searchQuery = query
+            notifyDataSetChanged()
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReaderViewHolder {
@@ -98,7 +100,11 @@ class ReaderAdapter(
             val ctx = itemView.context
 
             // Badge & Titles
-            tvCategoryBadge.text = if (page.category == DocCategory.JNI) "JNI DOCUMENTATION" else "ANDROID PRINCIPLE"
+            tvCategoryBadge.text = when (page.category) {
+                DocCategory.JNI -> "JNI DOCUMENTATION"
+                DocCategory.ANDROID_RULES -> "ANDROID PRINCIPLE"
+                DocCategory.FLUTTER -> "FLUTTER DEVELOPMENT"
+            }
             tvPageTitle.text = page.chapterTitle
             tvPageSubtitle.text = page.subtitle
 

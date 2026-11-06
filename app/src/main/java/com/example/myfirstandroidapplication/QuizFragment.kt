@@ -4,12 +4,16 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.myfirstandroidapplication.adapters.ReaderTheme
+import com.example.myfirstandroidapplication.data.AchievementManager
 import com.example.myfirstandroidapplication.data.PreferencesManager
 import com.example.myfirstandroidapplication.data.QuizRepository
+import com.example.myfirstandroidapplication.models.CommunityQuestion
+import com.example.myfirstandroidapplication.models.CommunityQuiz
 import com.example.myfirstandroidapplication.models.DocCategory
 import com.example.myfirstandroidapplication.models.QuizDifficulty
 import com.example.myfirstandroidapplication.models.QuizQuestion
@@ -22,6 +26,8 @@ class QuizFragment : Fragment(R.layout.fragment_quiz) {
 
     private lateinit var quizScrollView: ScrollView
     private lateinit var quizCategoryTabs: TabLayout
+    private var btnCommunityQuizzes: MaterialButton? = null
+    private var btnCreateQuiz: MaterialButton? = null
     private lateinit var quizProgressBar: LinearProgressIndicator
     private lateinit var tvQuizProgressCounter: TextView
     private lateinit var questionCard: LinearLayout
@@ -50,6 +56,10 @@ class QuizFragment : Fragment(R.layout.fragment_quiz) {
     private lateinit var rbHard: RadioButton
     private lateinit var tvDifficultyLabel: TextView
 
+    private lateinit var emptyCategoryContainer: LinearLayout
+    private lateinit var tvEmptyCategoryMessage: TextView
+    private lateinit var tvEmptyCategorySubtext: TextView
+
     private var currentQuestions: List<QuizQuestion> = QuizRepository.jniQuestions.shuffled()
     private var currentQuestionIndex = 0
     private var score = 0
@@ -60,10 +70,25 @@ class QuizFragment : Fragment(R.layout.fragment_quiz) {
     private var currentDifficulty: QuizDifficulty = QuizDifficulty.MEDIUM
     var currentTheme: ReaderTheme = ReaderTheme.SEPIA
 
+    /** Quiz chosen from Community, kept so Retry replays the same questions. */
+    private var activeCommunityQuestions: List<QuizQuestion>? = null
+    private var activeCommunityCreatorName: String = ""
+
+    /** Set before the player view exists. Applied at the end of [onViewCreated]. */
+    private var pendingCommunityQuiz: CommunityQuiz? = null
+
+    /**
+     * Tab and difficulty view-state restoration runs after [onViewCreated] and would
+     * replace the community quiz with a built-in category set. Ignore those callbacks
+     * until the screen is resumed.
+     */
+    private var acceptCategoryChanges = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         preferencesManager = PreferencesManager(requireContext())
+        acceptCategoryChanges = false
         initViews(view)
         setupCategoryTabs()
         setupListeners()
@@ -74,7 +99,21 @@ class QuizFragment : Fragment(R.layout.fragment_quiz) {
         }
 
         applyTheme(currentTheme)
-        resetQuiz()
+        // If a community quiz was queued, load it; otherwise load the first category questions
+        if (pendingCommunityQuiz != null) {
+            showPendingCommunityQuiz()
+        } else if (activeCommunityQuestions != null) {
+            resetQuiz()
+        } else {
+            val baseList = QuizRepository.jniQuestions
+            currentQuestions = filterQuestionsByDifficulty(baseList).shuffled()
+            resetQuiz()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        acceptCategoryChanges = true
     }
 
     private fun initViews(view: View) {
@@ -108,6 +147,11 @@ class QuizFragment : Fragment(R.layout.fragment_quiz) {
         rbMedium = view.findViewById(R.id.rbMedium)
         rbHard = view.findViewById(R.id.rbHard)
         tvDifficultyLabel = view.findViewById(R.id.tvDifficultyLabel)
+        btnCommunityQuizzes = view.findViewById(R.id.btnCommunityQuizzes)
+        btnCreateQuiz = view.findViewById(R.id.btnCreateQuiz)
+        emptyCategoryContainer = view.findViewById(R.id.emptyCategoryContainer)
+        tvEmptyCategoryMessage = view.findViewById(R.id.tvEmptyCategoryMessage)
+        tvEmptyCategorySubtext = view.findViewById(R.id.tvEmptyCategorySubtext)
     }
 
     fun applyTheme(theme: ReaderTheme) {
@@ -151,9 +195,20 @@ class QuizFragment : Fragment(R.layout.fragment_quiz) {
         rbMedium.setTextColor(textColor)
         rbHard.setTextColor(textColor)
 
+        btnCommunityQuizzes?.setTextColor(textColor)
+        btnCreateQuiz?.setTextColor(textColor)
+        val accentColor = ContextCompat.getColorStateList(ctx, R.color.accent)
+        btnCommunityQuizzes?.strokeColor = accentColor
+        btnCreateQuiz?.strokeColor = accentColor
+
         questionCard.setBackgroundColor(cardBg)
         explanationContainer.setBackgroundColor(cardBg)
         scoreSummaryContainer.setBackgroundColor(cardBg)
+        if (::emptyCategoryContainer.isInitialized) {
+            emptyCategoryContainer.setBackgroundColor(cardBg)
+            tvEmptyCategoryMessage.setTextColor(textColor)
+            tvEmptyCategorySubtext.setTextColor(subtextColor)
+        }
 
         val optionButtons = listOf(rbOption0, rbOption1, rbOption2, rbOption3)
         for (rb in optionButtons) {
@@ -166,14 +221,14 @@ class QuizFragment : Fragment(R.layout.fragment_quiz) {
     private fun setupCategoryTabs() {
         quizCategoryTabs.addTab(quizCategoryTabs.newTab().setText("1. JNI Quiz"))
         quizCategoryTabs.addTab(quizCategoryTabs.newTab().setText("2. Android Principles"))
+        quizCategoryTabs.addTab(quizCategoryTabs.newTab().setText("3. Flutter Quiz"))
 
         quizCategoryTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
+                // View setup and saved tab state run before the user can change category.
+                if (!acceptCategoryChanges || pendingCommunityQuiz != null) return
                 val position = tab?.position ?: 0
-                currentQuestions = filterQuestionsByDifficulty(
-                    if (position == 0) QuizRepository.jniQuestions else QuizRepository.androidQuestions
-                ).shuffled()
-                resetQuiz()
+                loadCategoryQuestions(position)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
@@ -186,12 +241,53 @@ class QuizFragment : Fragment(R.layout.fragment_quiz) {
                 R.id.rbHard -> QuizDifficulty.HARD
                 else -> QuizDifficulty.MEDIUM
             }
-            val pos = quizCategoryTabs.selectedTabPosition
-            currentQuestions = filterQuestionsByDifficulty(
-                if (pos == 1) QuizRepository.androidQuestions else QuizRepository.jniQuestions
-            ).shuffled()
+            if (!acceptCategoryChanges || pendingCommunityQuiz != null) return@setOnCheckedChangeListener
+            
+            val pos = quizCategoryTabs.selectedTabPosition.coerceAtLeast(0)
+            loadCategoryQuestions(pos)
+        }
+    }
+
+    private fun loadCategoryQuestions(position: Int) {
+        val selectedCategory = when (position) {
+            0 -> DocCategory.JNI
+            1 -> DocCategory.ANDROID_RULES
+            2 -> DocCategory.FLUTTER
+            else -> DocCategory.JNI
+        }
+
+        val communityList = activeCommunityQuestions
+        if (communityList != null) {
+            // Filter user's questions by the selected category first
+            val categoryFiltered = communityList.filter { it.category == selectedCategory }
+            if (categoryFiltered.isEmpty()) {
+                showEmptyCategoryState(selectedCategory)
+                return
+            }
+            // Now filter by selected difficulty
+            currentQuestions = filterQuestionsByDifficulty(categoryFiltered).shuffled()
+            resetQuiz()
+        } else {
+            val baseList = when (position) {
+                0 -> QuizRepository.jniQuestions
+                1 -> QuizRepository.androidQuestions
+                2 -> QuizRepository.flutterQuestions
+                else -> QuizRepository.jniQuestions
+            }
+            currentQuestions = filterQuestionsByDifficulty(baseList).shuffled()
             resetQuiz()
         }
+    }
+
+    private fun showEmptyCategoryState(category: DocCategory) {
+        val creator = activeCommunityCreatorName.ifBlank { "the creator" }
+        emptyCategoryContainer.visibility = View.VISIBLE
+        tvEmptyCategoryMessage.text = "No questions uploaded by \"$creator\" for ${category.displayName}"
+        questionCard.visibility = View.GONE
+        explanationContainer.visibility = View.GONE
+        scoreSummaryContainer.visibility = View.GONE
+        quizProgressBar.visibility = View.GONE
+        tvQuizProgressCounter.visibility = View.GONE
     }
 
     private fun filterQuestionsByDifficulty(questions: List<QuizQuestion>): List<QuizQuestion> {
@@ -235,6 +331,83 @@ class QuizFragment : Fragment(R.layout.fragment_quiz) {
         btnReviewMistakes.setOnClickListener {
             startReviewMode()
         }
+
+        btnCommunityQuizzes?.setOnClickListener {
+            (activity as? MainActivity)?.switchFragment("COMMUNITY_LIST")
+        }
+
+        btnCreateQuiz?.setOnClickListener {
+            (activity as? MainActivity)?.switchFragment("QUIZ_EDITOR")
+        }
+    }
+
+    /**
+     * Stores [quiz] and shows it when the player view is on screen.
+     * Safe to call while this fragment is stopped on the back stack: the questions
+     * are applied in [onViewCreated] after the built-in category tabs are created.
+     */
+    fun prepareCommunityQuiz(quiz: CommunityQuiz) {
+        pendingCommunityQuiz = quiz
+        if (view != null && ::questionCard.isInitialized) {
+            showPendingCommunityQuiz()
+        }
+    }
+
+    private fun showPendingCommunityQuiz() {
+        val quiz = pendingCommunityQuiz ?: return
+        val convertedQuestions = quiz.questions.mapIndexed { idx, q ->
+            q.toQuizQuestion(1000 + idx)
+        }
+        if (convertedQuestions.isEmpty()) {
+            pendingCommunityQuiz = null
+            context?.let {
+                Toast.makeText(it, "This quiz has no questions yet", Toast.LENGTH_SHORT).show()
+            }
+            return
+        }
+        activeCommunityQuestions = convertedQuestions
+        activeCommunityCreatorName = quiz.authorName.ifBlank { "the creator" }
+        pendingCommunityQuiz = null
+
+        // Select the tab that corresponds to the first category in this community quiz
+        val targetCat = convertedQuestions.firstOrNull()?.category ?: DocCategory.JNI
+        val targetTabPosition = when (targetCat) {
+            DocCategory.JNI -> 0
+            DocCategory.ANDROID_RULES -> 1
+            DocCategory.FLUTTER -> 2
+        }
+
+        val currentTab = quizCategoryTabs.selectedTabPosition
+        if (currentTab != targetTabPosition) {
+            quizCategoryTabs.getTabAt(targetTabPosition)?.select()
+        }
+
+        // Filter user questions by this target category & difficulty
+        val categoryQuestions = convertedQuestions.filter { it.category == targetCat }
+        currentQuestions = if (categoryQuestions.isNotEmpty()) {
+            filterQuestionsByDifficulty(categoryQuestions).shuffled()
+        } else {
+            filterQuestionsByDifficulty(convertedQuestions).shuffled()
+        }
+
+        resetQuiz()
+        context?.let {
+            Toast.makeText(it, "Started: ${quiz.title}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun CommunityQuestion.toQuizQuestion(id: Int): QuizQuestion {
+        val safeOptions = options.filter { it.isNotBlank() }.ifEmpty { listOf("—") }
+        val safeIndex = correctAnswerIndex.coerceIn(0, safeOptions.lastIndex)
+        return QuizQuestion(
+            id = id,
+            category = category,
+            questionText = questionText.ifBlank { "Untitled question" },
+            options = safeOptions,
+            correctAnswerIndex = safeIndex,
+            explanation = explanation,
+            difficulty = difficulty
+        )
     }
 
     private fun resetQuiz() {
@@ -243,26 +416,38 @@ class QuizFragment : Fragment(R.layout.fragment_quiz) {
         incorrectQuestionIndices.clear()
         isReviewMode = false
         scoreSummaryContainer.visibility = View.GONE
+        emptyCategoryContainer.visibility = View.GONE
         questionCard.visibility = View.VISIBLE
-        val pos = quizCategoryTabs.selectedTabPosition
-        val baseList = if (pos == 1) QuizRepository.androidQuestions else QuizRepository.jniQuestions
-        currentQuestions = filterQuestionsByDifficulty(baseList).shuffled()
-        loadQuestion(0)
+        quizProgressBar.visibility = View.VISIBLE
+        tvQuizProgressCounter.visibility = View.VISIBLE
+
+        if (currentQuestions.isNotEmpty()) {
+            loadQuestion(0)
+        }
     }
 
     private fun loadQuestion(index: Int) {
         isAnswerSubmitted = false
         explanationContainer.visibility = View.GONE
         optionsRadioGroup.clearCheck()
+        quizScrollView.post { quizScrollView.scrollTo(0, 0) }
 
         val question = currentQuestions[index]
         tvQuestionText.text = question.questionText
 
+        // Community questions can have 2, 3, or 4 choices. The editor drops blank options.
         val optionButtons = listOf(rbOption0, rbOption1, rbOption2, rbOption3)
-        for (i in 0 until 4) {
+        for (i in optionButtons.indices) {
             val rb = optionButtons[i]
-            rb.text = question.options[i]
-            rb.isEnabled = true
+            if (i < question.options.size) {
+                rb.visibility = View.VISIBLE
+                rb.text = question.options[i]
+                rb.isEnabled = true
+            } else {
+                rb.visibility = View.GONE
+                rb.text = ""
+                rb.isEnabled = false
+            }
         }
 
         applyTheme(currentTheme)
@@ -299,8 +484,13 @@ class QuizFragment : Fragment(R.layout.fragment_quiz) {
             btnNextQuestion.text = "Next Question ➔"
         }
 
+        // Automatically smooth scroll down to the explanation box
+        quizScrollView.post {
+            quizScrollView.smoothScrollTo(0, explanationContainer.top)
+        }
+
         val optionButtons = listOf(rbOption0, rbOption1, rbOption2, rbOption3)
-        for (i in 0 until 4) {
+        for (i in question.options.indices) {
             val rb = optionButtons[i]
             rb.isEnabled = false
             if (i == question.correctAnswerIndex) {
@@ -337,6 +527,7 @@ class QuizFragment : Fragment(R.layout.fragment_quiz) {
         if (!isReviewMode) {
             viewLifecycleOwner.lifecycleScope.launch {
                 preferencesManager.recordQuizResult(score, total)
+                AchievementManager.getInstance(requireContext()).trackQuizCompleted(percent)
             }
         }
     }
@@ -356,7 +547,13 @@ class QuizFragment : Fragment(R.layout.fragment_quiz) {
     }
 
     fun filterQuestionsByChapter(category: DocCategory) {
-        val tabPosition = if (category == DocCategory.JNI) 0 else 1
+        activeCommunityQuestions = null
+        pendingCommunityQuiz = null
+        val tabPosition = when (category) {
+            DocCategory.JNI -> 0
+            DocCategory.ANDROID_RULES -> 1
+            DocCategory.FLUTTER -> 2
+        }
         quizCategoryTabs.selectTab(quizCategoryTabs.getTabAt(tabPosition))
         resetQuiz()
     }

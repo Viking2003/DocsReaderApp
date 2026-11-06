@@ -1,1 +1,24 @@
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
 /build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+# Keystore files (security)
+*.jks
+*.keystore
+keystores/
+# Gradle properties (may contain sensitive passwords)
+gradle.properties
+# APK folder is intentionally tracked for distribution
+# The build directory is ignored, but we keep apks/ folder for distribution
+!apks/

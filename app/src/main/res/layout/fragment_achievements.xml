@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/achievementsScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/kindle_sepia_bg"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- User Profile Card -->
+        <LinearLayout
+            android:id="@+id/cardProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/kindle_sepia_card"
+            android:padding="16dp"
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                android:id="@+id/tvProgressHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Your Progress"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/kindle_sepia_text"
+                android:layout_marginBottom="16dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
+
+                <TextView
+                    android:id="@+id/tvLevel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Level 1"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/kindle_sepia_text" />
+
+                <TextView
+                    android:id="@+id/tvStreak"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 Day Streak"
+                    android:textSize="16sp"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/bg_category_badge"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="6dp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvXP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0 / 1000 XP"
+                android:textSize="14sp"
+                android:textColor="@color/kindle_sepia_subtext"
+                android:layout_marginBottom="8dp" />
+
+            <View
+                android:id="@+id/progressXP"
+                android:layout_width="0dp"
+                android:layout_height="8dp"
+                android:background="@color/kindle_sepia_text"
+                android:alpha="0.3" />
+        </LinearLayout>
+
+        <!-- Achievements Section Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/tvAchievementsHeader"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Achievements"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/kindle_sepia_text" />
+
+            <TextView
+                android:id="@+id/tvUnlockedLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Unlocked: "
+                android:textSize="14sp"
+                android:textColor="@color/kindle_sepia_subtext" />
+
+            <TextView
+                android:id="@+id/tvUnlockedCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/kindle_sepia_text" />
+
+            <TextView
+                android:id="@+id/tvTotalLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" / "
+                android:textSize="14sp"
+                android:textColor="@color/kindle_sepia_subtext" />
+
+            <TextView
+                android:id="@+id/tvTotalCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="14sp"
+                android:textColor="@color/kindle_sepia_subtext" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvAchievements"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false" />
+
+    </LinearLayout>
+</ScrollView>
