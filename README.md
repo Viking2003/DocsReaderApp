@@ -11,13 +11,7 @@ A modern, feature-rich Android documentation reader built with Kotlin and Jetpac
 
 **Latest Release**: [app-release.apk](apks/app-release.apk) (v2.0)
 
-### Quick Installation
-1. Download the APK from the [apks](apks/) folder
-2. Enable "Install from Unknown Sources" in your device settings
-3. Tap the APK file to install
-4. Launch the app and start learning!
-
-### Alternative Download Methods
+### Download Methods
 - **GitHub Releases**: Check the [Releases](../../releases) page for all versions
 - **Direct Download**: [Download APK](apks/app-release.apk)
 
