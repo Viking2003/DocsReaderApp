@@ -1,6 +1,6 @@
 # Docs Reader Application
 
-A modern, feature-rich Android documentation reader built with Kotlin and Jetpack components. This application provides an immersive reading experience with interactive quizzes, theme customization, and comprehensive learning content about Java Native Interface (JNI) and Android development best practices.
+A modern, feature-rich Android documentation reader built with Kotlin and Jetpack components. This application provides an immersive reading experience with interactive quizzes, theme customization, and comprehensive learning content about Java Native Interface (JNI) and Android development best practices and Flutter Development Guide.
 
 ![Android](https://img.shields.io/badge/Android-34%2B-green)
 ![Kotlin](https://img.shields.io/badge/Kotlin-1.9-blue)
@@ -154,6 +154,11 @@ This application follows modern Android development principles:
   - Espresso - UI testing
 
 ## 📱 Screenshots
+<img width="364" height="743" alt="image" src="https://github.com/user-attachments/assets/2af7f51f-b950-447c-9607-6368a10d48f0" />
+<img width="368" height="735" alt="image" src="https://github.com/user-attachments/assets/dec66d67-69fc-4008-b034-c0f591887df4" />
+<img width="364" height="732" alt="image" src="https://github.com/user-attachments/assets/af7d3e78-3a11-4d0e-80d8-0b6dddd1a090" />
+<img width="366" height="745" alt="image" src="https://github.com/user-attachments/assets/9ec4b5dd-128b-42da-9c48-8889df6fc57e" />
+<img width="369" height="749" alt="image" src="https://github.com/user-attachments/assets/43fc68e3-9a12-4d23-95dd-59eb1487a420" />
 
 ### Reader View
 - Clean, distraction-free reading interface
@@ -320,12 +325,9 @@ app/
 
 ## 🔮 Future Enhancements
 
-- [ ] Export notes and bookmarks to external files
-- [ ] Cloud sync for reading progress across devices
 - [ ] Additional documentation topics
 - [ ] Voice search capability
 - [ ] Text-to-speech for content
-- [ ] Community quiz sharing
 - [ ] Achievements and gamification
 - [ ] Dark mode scheduling customization
 
