@@ -9,11 +9,10 @@ A modern, feature-rich Android documentation reader built with Kotlin and Jetpac
 
 ## 📥 Download APK
 
-**Latest Release**: [app-release.apk](apks/app-release.apk) (v2.0)
+**Latest Release**: [DocsReader](../../releases/download/v2.0/app-release-v2.0-quiz-fixes.apk) (v2.0)
 
 ### Download Methods
-- **GitHub Releases**: Check the [Releases](../../releases) page for all versions
-- **Direct Download**: [Download APK](apks/app-release.apk)
+- **GitHub Releases**: Check the [Releases](../../releases) page for all versions.
 
 ### System Requirements
 - Android 14 (API 34) or higher
