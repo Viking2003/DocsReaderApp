@@ -96,7 +96,7 @@ class AchievementManager private constructor(context: Context) {
             }
             achievement.copy(
                 isUnlocked = isUnlocked,
-                requirement = achievement.requirement.copy(current = currentValue)
+                requirement = achievement.requirement.copy(current = currentValue.coerceAtMost(achievement.requirement.target))
             )
         }
     }
@@ -296,11 +296,11 @@ class AchievementManager private constructor(context: Context) {
                     achievement.copy(
                         isUnlocked = true,
                         unlockedAt = System.currentTimeMillis(),
-                        requirement = achievement.requirement.copy(current = currentValue)
+                        requirement = achievement.requirement.copy(current = currentValue.coerceAtMost(achievement.requirement.target))
                     )
                 } else {
                     achievement.copy(
-                        requirement = achievement.requirement.copy(current = currentValue)
+                        requirement = achievement.requirement.copy(current = currentValue.coerceAtMost(achievement.requirement.target))
                     )
                 }
             } else {

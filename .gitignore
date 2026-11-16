@@ -22,3 +22,4 @@ gradle.properties
 # APK folder is intentionally tracked for distribution
 # The build directory is ignored, but we keep apks/ folder for distribution
 !apks/
+firestore.rules
