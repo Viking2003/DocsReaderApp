@@ -10,6 +10,8 @@ import com.example.myfirstandroidapplication.models.UserProfile
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
 class AchievementManager private constructor(context: Context) {
 
@@ -43,6 +45,8 @@ class AchievementManager private constructor(context: Context) {
         val bookmarks = prefs.getInt("bookmarks_created", 0)
         val readingMinutes = prefs.getLong("reading_minutes", 0L)
         val streak = prefs.getInt("daily_streak", 1)
+        val longestStreak = prefs.getInt("longest_streak", 1)
+        val lastActiveDate = prefs.getLong("last_active_date", 0L).takeIf { it > 0L }
 
         return UserProfile(
             userId = "local_user",
@@ -50,11 +54,12 @@ class AchievementManager private constructor(context: Context) {
             level = level,
             xp = xp,
             currentStreak = streak,
-            longestStreak = streak,
+            longestStreak = longestStreak,
             totalReadingTimeMinutes = readingMinutes,
             totalQuizzesCompleted = quizzes,
             totalBookmarks = bookmarks,
-            totalNotes = notes
+            totalNotes = notes,
+            lastActiveDate = lastActiveDate
         )
     }
 
@@ -66,6 +71,8 @@ class AchievementManager private constructor(context: Context) {
             .putInt("bookmarks_created", profile.totalBookmarks)
             .putLong("reading_minutes", profile.totalReadingTimeMinutes)
             .putInt("daily_streak", profile.currentStreak)
+            .putInt("longest_streak", profile.longestStreak)
+            .putLong("last_active_date", profile.lastActiveDate ?: 0L)
             .apply()
     }
 
@@ -284,6 +291,57 @@ class AchievementManager private constructor(context: Context) {
 
         checkAchievement("notes_created", newNotes)
         addXP(25)
+    }
+
+    fun trackDailyOpen() {
+        val currentProfile = _userProfile.value
+        val currentTime = System.currentTimeMillis()
+        val lastActiveTime = currentProfile.lastActiveDate
+
+        val calendar = Calendar.getInstance()
+        val today = calendar.get(Calendar.DAY_OF_YEAR)
+        val currentYear = calendar.get(Calendar.YEAR)
+
+        val lastCalendar = Calendar.getInstance()
+        lastActiveTime?.let {
+            lastCalendar.timeInMillis = it
+        }
+        val lastDay = lastCalendar.get(Calendar.DAY_OF_YEAR)
+        val lastYear = lastCalendar.get(Calendar.YEAR)
+
+        val newStreak = when {
+            lastActiveTime == null -> {
+                1
+            }
+            (currentYear == lastYear && today == lastDay) -> {
+                currentProfile.currentStreak
+            }
+            isConsecutiveDay(lastCalendar, calendar) -> {
+                currentProfile.currentStreak + 1
+            }
+            else -> {
+                1
+            }
+        }
+
+        val newLongestStreak = maxOf(newStreak, currentProfile.longestStreak)
+
+        val updatedProfile = currentProfile.copy(
+            currentStreak = newStreak,
+            longestStreak = newLongestStreak,
+            lastActiveDate = currentTime
+        )
+        _userProfile.value = updatedProfile
+        _dailyStreak.value = newStreak
+        saveUserProfile(updatedProfile)
+
+        checkAchievement("daily_streak", newStreak)
+    }
+
+    private fun isConsecutiveDay(lastCalendar: Calendar, currentCalendar: Calendar): Boolean {
+        val diffMillis = currentCalendar.timeInMillis - lastCalendar.timeInMillis
+        val diffDays = TimeUnit.MILLISECONDS.toDays(diffMillis)
+        return diffDays == 1L
     }
 
     private fun checkAchievement(requirementType: String, currentValue: Int) {

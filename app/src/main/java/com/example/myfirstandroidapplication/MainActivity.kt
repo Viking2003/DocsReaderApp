@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.example.myfirstandroidapplication.adapters.ReaderTheme
+import com.example.myfirstandroidapplication.data.AchievementManager
 import com.example.myfirstandroidapplication.data.AuthManager
 import com.example.myfirstandroidapplication.data.PreferencesManager
 import com.google.android.material.tabs.TabLayout
@@ -57,6 +58,8 @@ class MainActivity : AppCompatActivity() {
             if (isGoogle || completedChoice) {
                 // Ensure auth user id is loaded
                 AuthManager.ensureUserId(this@MainActivity)
+                // Track daily streak
+                AchievementManager.getInstance(this@MainActivity).trackDailyOpen()
                 switchFragment("READER")
             } else {
                 showAuthStartup()
@@ -76,6 +79,8 @@ class MainActivity : AppCompatActivity() {
         mainNavTabs.visibility = android.view.View.VISIBLE
         findViewById<android.view.View>(R.id.topToolbar)?.visibility = android.view.View.VISIBLE
         mainNavTabs.getTabAt(0)?.select()
+        // Track daily streak for new auth completion
+        AchievementManager.getInstance(this).trackDailyOpen()
         switchFragment("READER")
     }
 
