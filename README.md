@@ -9,7 +9,7 @@ A modern, feature-rich Android documentation reader built with Kotlin and Jetpac
 
 ## 📥 Download APK
 
-**Latest Release**: [DocsReader](../../releases/download/v2.0/DocsReader_v2.0.apk) (v2.0)
+**Latest Release**: [DocsReader (v2.1)](../../releases/download/v2.1/DocsReaderApp-v2.1.apk) 
 
 ### Download Methods
 - **GitHub Releases**: Check the [Releases](../../releases) page for all versions.
