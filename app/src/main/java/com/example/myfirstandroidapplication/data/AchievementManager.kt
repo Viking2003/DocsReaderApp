@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit
 
 class AchievementManager private constructor(context: Context) {
 
+    private val context = context.applicationContext
     private val prefs: SharedPreferences = context.applicationContext.getSharedPreferences("achievements_prefs", Context.MODE_PRIVATE)
 
     companion object {
@@ -36,6 +37,11 @@ class AchievementManager private constructor(context: Context) {
 
     private val _dailyStreak = MutableStateFlow(loadUserProfile().currentStreak)
     val dailyStreak: StateFlow<Int> = _dailyStreak.asStateFlow()
+
+    init {
+        // Sync disabled - XP is added immediately when activities happen
+        // syncXPWithAchievements()
+    }
 
     private fun loadUserProfile(): UserProfile {
         val xp = prefs.getInt("user_xp", 0)
@@ -63,6 +69,39 @@ class AchievementManager private constructor(context: Context) {
         )
     }
 
+    fun syncXPWithAchievements() {
+        val currentProfile = _userProfile.value
+        val unlockedIds = prefs.getStringSet("unlocked_achievements", emptySet()) ?: emptySet()
+        val achievements = loadAchievements()
+
+        var calculatedXP = 0
+
+        // XP from achievements ONLY (activities already add XP when they happen)
+        // We only add achievement XP to catch cases where achievements were unlocked
+        // but the XP wasn't awarded (e.g., app crash during unlock)
+        for (achievement in achievements) {
+            if (achievement.isUnlocked) {
+                calculatedXP += achievement.xpReward
+            }
+        }
+
+        android.util.Log.d("AchievementManager", "XP Sync - Current: ${currentProfile.xp}, Calculated from achievements: $calculatedXP, Unlocked: ${achievements.count { it.isUnlocked }}")
+
+        // Only update if stored XP is less than calculated (prevent overwriting legitimate XP)
+        if (currentProfile.xp < calculatedXP) {
+            val newLevel = calculateLevel(calculatedXP)
+            val updatedProfile = currentProfile.copy(
+                xp = calculatedXP,
+                level = newLevel
+            )
+            _userProfile.value = updatedProfile
+            saveUserProfile(updatedProfile)
+            android.util.Log.d("AchievementManager", "XP updated from ${currentProfile.xp} to $calculatedXP")
+        } else {
+            android.util.Log.d("AchievementManager", "XP not updated (current XP is already correct or higher)")
+        }
+    }
+
     private fun saveUserProfile(profile: UserProfile) {
         prefs.edit()
             .putInt("user_xp", profile.xp)
@@ -80,12 +119,13 @@ class AchievementManager private constructor(context: Context) {
         val unlockedIds = prefs.getStringSet("unlocked_achievements", emptySet()) ?: emptySet()
         val baseList = initializeAchievements()
 
-        val pagesRead = (prefs.getLong("reading_minutes", 0L) / 5).toInt().coerceAtLeast(1)
+        val pagesRead = (prefs.getLong("reading_minutes", 0L) / 5).toInt()
         val quizzes = prefs.getInt("quizzes_completed", 0)
         val perfectQuizzes = prefs.getInt("perfect_quizzes", 0)
         val bookmarks = prefs.getInt("bookmarks_created", 0)
         val notes = prefs.getInt("notes_created", 0)
         val streak = prefs.getInt("daily_streak", 1)
+        val categoriesExplored = prefs.getStringSet("categories_explored", emptySet())?.size ?: 0
 
         return baseList.map { achievement ->
             val currentValue = when (achievement.requirement.type) {
@@ -95,12 +135,12 @@ class AchievementManager private constructor(context: Context) {
                 "bookmarks_created" -> bookmarks
                 "notes_created" -> notes
                 "daily_streak" -> streak
+                "categories_explored" -> categoriesExplored
                 else -> 0
             }
-            val isUnlocked = unlockedIds.contains(achievement.id) || currentValue >= achievement.requirement.target
-            if (isUnlocked && !unlockedIds.contains(achievement.id)) {
-                saveUnlockedAchievement(achievement.id)
-            }
+            // Only unlock if explicitly saved in unlocked_achievements
+            // Auto-unlocking via currentValue is disabled to ensure XP and toast are always shown
+            val isUnlocked = unlockedIds.contains(achievement.id)
             achievement.copy(
                 isUnlocked = isUnlocked,
                 requirement = achievement.requirement.copy(current = currentValue.coerceAtMost(achievement.requirement.target))
@@ -231,14 +271,14 @@ class AchievementManager private constructor(context: Context) {
                 type = AchievementType.EXPLORER,
                 iconRes = R.drawable.ic_menu_compass,
                 xpReward = 200,
-                requirement = AchievementRequirement("categories_explored", 2, 0)
+                requirement = AchievementRequirement("categories_explored", 3, 0)
             )
         )
     }
 
-    fun trackPageRead() {
+    fun trackPageRead(minutes: Int = 5) {
         val currentProfile = _userProfile.value
-        val newMinutes = currentProfile.totalReadingTimeMinutes + 5
+        val newMinutes = currentProfile.totalReadingTimeMinutes + minutes
         val pagesRead = (newMinutes / 5).toInt()
 
         val updatedProfile = currentProfile.copy(totalReadingTimeMinutes = newMinutes)
@@ -246,7 +286,16 @@ class AchievementManager private constructor(context: Context) {
         saveUserProfile(updatedProfile)
 
         checkAchievement("pages_read", pagesRead)
-        addXP(10)
+        addXP(10, "Reading progress")
+    }
+
+    fun trackCategoryExplored(categoryName: String) {
+        val currentSet = prefs.getStringSet("categories_explored", emptySet())?.toMutableSet() ?: mutableSetOf()
+        if (!currentSet.contains(categoryName)) {
+            currentSet.add(categoryName)
+            prefs.edit().putStringSet("categories_explored", currentSet).apply()
+            checkAchievement("categories_explored", currentSet.size)
+        }
     }
 
     fun trackQuizCompleted(scorePercent: Int) {
@@ -266,7 +315,7 @@ class AchievementManager private constructor(context: Context) {
         }
 
         // Award XP based on quiz score (e.g. 100 XP for 100%, 80 XP for 80%)
-        addXP(scorePercent)
+        addXP(scorePercent, "Quiz completed ($scorePercent%)")
     }
 
     fun trackBookmarkCreated() {
@@ -278,7 +327,7 @@ class AchievementManager private constructor(context: Context) {
         saveUserProfile(updatedProfile)
 
         checkAchievement("bookmarks_created", newBookmarks)
-        addXP(25)
+        addXP(25, "Bookmark created")
     }
 
     fun trackNoteCreated() {
@@ -290,7 +339,7 @@ class AchievementManager private constructor(context: Context) {
         saveUserProfile(updatedProfile)
 
         checkAchievement("notes_created", newNotes)
-        addXP(25)
+        addXP(25, "Note created")
     }
 
     fun trackDailyOpen() {
@@ -350,7 +399,7 @@ class AchievementManager private constructor(context: Context) {
                 val shouldUnlock = !achievement.isUnlocked && currentValue >= achievement.requirement.target
                 if (shouldUnlock) {
                     saveUnlockedAchievement(achievement.id)
-                    addXP(achievement.xpReward)
+                    addXP(achievement.xpReward, "Achievement: ${achievement.title}")
                     achievement.copy(
                         isUnlocked = true,
                         unlockedAt = System.currentTimeMillis(),
@@ -369,7 +418,7 @@ class AchievementManager private constructor(context: Context) {
         _achievements.value = updatedAchievements
     }
 
-    private fun addXP(amount: Int) {
+    private fun addXP(amount: Int, reason: String = "") {
         val currentProfile = _userProfile.value
         val newXP = currentProfile.xp + amount
         val newLevel = calculateLevel(newXP)
@@ -380,6 +429,14 @@ class AchievementManager private constructor(context: Context) {
         )
         _userProfile.value = updatedProfile
         saveUserProfile(updatedProfile)
+
+        // Show toast notification
+        val message = if (reason.isNotEmpty()) {
+            "+$amount XP: $reason"
+        } else {
+            "+$amount XP"
+        }
+        android.widget.Toast.makeText(context, message, android.widget.Toast.LENGTH_SHORT).show()
     }
 
     private fun calculateLevel(xp: Int): Int {
@@ -390,7 +447,7 @@ class AchievementManager private constructor(context: Context) {
         while (remainingXP >= xpNeeded) {
             remainingXP -= xpNeeded
             level++
-            xpNeeded = level * 1000
+            xpNeeded = 1000
         }
 
         return level

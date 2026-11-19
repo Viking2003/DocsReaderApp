@@ -64,6 +64,8 @@ class ReaderFragment : Fragment(R.layout.fragment_reader) {
             CoroutineScope(Dispatchers.IO).launch {
                 preferencesManager.addReadingTime(elapsedMinutes)
             }
+            // Track page read for achievements and XP
+            AchievementManager.getInstance(requireContext()).trackPageRead()
             pageStartTime = System.currentTimeMillis()
             readingTimeHandler?.postDelayed(this, 60000)
         }
@@ -163,6 +165,14 @@ class ReaderFragment : Fragment(R.layout.fragment_reader) {
                         2 -> DocRepository.flutterPages
                         else -> DocRepository.jniPages
                     }
+                    // Track category exploration for achievement
+                    val categoryName = when (position) {
+                        0 -> "JNI"
+                        1 -> "Android Rules"
+                        2 -> "Flutter"
+                        else -> "JNI"
+                    }
+                    AchievementManager.getInstance(requireContext()).trackCategoryExplored(categoryName)
                     if (::readerAdapter.isInitialized) {
                         readerAdapter.updatePages(currentPages)
                         readerAdapter.setSearchQuery(null) // Clear search highlight when switching tabs

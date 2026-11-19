@@ -16,10 +16,22 @@ data class UserProfile(
     val cloudSyncEnabled: Boolean = false
 ) {
     fun xpToNextLevel(): Int {
-        return level * 1000
+        return (level + 1) * 1000
+    }
+
+    fun xpForCurrentLevel(): Int {
+        return (level - 1) * 1000
     }
 
     fun progressToNextLevel(): Float {
-        return (xp.toFloat() / xpToNextLevel().toFloat()).coerceAtMost(1f)
+        val currentLevelThreshold = (level - 1) * 1000
+        val nextLevelThreshold = level * 1000
+        val xpInRange = nextLevelThreshold - currentLevelThreshold
+        val xpProgress = (xp - currentLevelThreshold).coerceAtLeast(0).coerceAtMost(xpInRange)
+        return if (xpInRange > 0) {
+            (xpProgress.toFloat() / xpInRange.toFloat()).coerceAtMost(1f)
+        } else {
+            0f
+        }
     }
 }

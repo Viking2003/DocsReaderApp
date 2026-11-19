@@ -19,6 +19,6 @@ local.properties
 keystores/
 # Gradle properties (may contain sensitive passwords)
 gradle.properties
-# APK folder is intentionally tracked for distribution
-# The build directory is ignored, but we keep apks/ folder for distribution
-!apks/
+# Release binaries: distribute via GitHub Releases, not the repo
+*.apk
+apks/
